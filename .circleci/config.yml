@@ -13,15 +13,16 @@ jobs:
       - checkout
       # run the aws-cli/setup command from the orb
       - aws-cli/setup:
-          role-arn: "arn:aws:iam::123456789012:role/OIDC-ROLE"
+          role-arn: "arn:aws:iam::565604310253:role/circleci-role"
           aws-region: AWS_REGION
           # optional parameters
           profile-name: "OIDC-PROFILE"
-          role-session-name: "example-session"
+          role-session-name: "circleci"
           session-duration: "1800"
       - run:
         name: Log-into-AWS-ECR
         command: |
+          aws sts get-caller-identity
           # must use same profile specified in the step above
           aws ecr get-login-password --profile "OIDC-PROFILE"
 workflows:
