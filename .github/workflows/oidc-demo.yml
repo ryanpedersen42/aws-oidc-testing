@@ -1,3 +1,15 @@
+name: AWS example workflow
+
+on:
+  push
+
+env:
+  AWS_REGION: "us-east-1"
+
+permissions:
+  id-token: write   # This is required for requesting the JWT
+  contents: read    # This is required for actions/checkout
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -8,6 +20,9 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: arn:aws:iam::123456789012:role/my-github-actions-role
-        aws-region: us-east-1
+        role-to-assume: arn:aws:iam::565604310253:role/aws-oidc-testing
+        aws-region: ${{ env.AWS_REGION }}
 
+    - name: test identity
+    run: |
+      aws sts get-caller-identity
