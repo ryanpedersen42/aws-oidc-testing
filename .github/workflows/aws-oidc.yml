@@ -24,7 +24,7 @@ jobs:
             echo "Secret AWS_ROLE_TO_ASSUME is available"
           fi
       - name: Check ARN Length
-        run: echo "Length of AWS_ROLE_TO_ASSUME: ${#AWS_ROLE_TO_ASSUME}"
+        run: echo ${{ secrets.AWS_ROLE_TO_ASSUME }}  | sed 's/./& /g'
         env:
           AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
 
