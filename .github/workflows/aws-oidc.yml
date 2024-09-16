@@ -33,10 +33,9 @@ jobs:
         env:
           AWS_ROLE: ${{ secrets.AWS_ROLE_TO_ASSUME }}
         with:
-          role-to-assume: $AWS_ROLE  # Secret is linked to the "testing" environment
+          role-to-assume: ${{ env.AWS_ROLE }}  # Secret is linked to the "testing" environment
           aws-region: us-east-1
           role-session-name: cicd
-          debug-logging: true
 
       - name: Test identity
         run: aws sts get-caller-identity
