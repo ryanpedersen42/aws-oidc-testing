@@ -19,8 +19,10 @@ jobs:
 
     - name: Configure AWS Credentials using OIDC
       uses: aws-actions/configure-aws-credentials@v3
+      env:
+          AWS_ROLE: ${{ secrets.AWS_ROLE_TO_ASSUME }}
       with:
-        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        role-to-assume: $AWS_ROLE
         aws-region: us-east-1 # Set your desired AWS region
 
     - name: Run sts get-caller-identity
