@@ -3,50 +3,31 @@ name: AWS example workflow
 on:
   push
 
+# env:
+#   AWS_REGION: "us-east-1"
 permissions:
-  id-token: write
-  contents: read
-
+  id-token: write   
+  contents: read  
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: testing  # Referencing the "testing" environment
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Debug OIDC Token
-        run: echo $ACTIONS_ID_TOKEN_REQUEST_URL
-      - name: Debug Secret Access
-        run: |
-          if [ -z "${{ secrets.AWS_ROLE_TO_ASSUME }}" ]; then
-            echo "Secret AWS_ROLE_TO_ASSUME is not available"
-          else
-            echo "Secret AWS_ROLE_TO_ASSUME is available"
-          fi
-      # - name: Check ARN Length
-      #   run: echo ${{ secrets.AWS_ROLE_TO_ASSUME }}  | sed 's/./& /g'
-      #   env:
-      #     AWS_ROLE: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-      # - name: Set AWS Role from Secret
-      #   run: echo "AWS_ROLE=${{ secrets.AWS_ROLE_ASSUMPTION }}" >> $GITHUB_ENV
-      # - name: Check Secret Length and Characters
-      #   run: |
-      #     SECRET_LENGTH=$(echo -n "${{ secrets.AWS_ROLE_ASSUMPTION }}" | wc -c)
-      #     echo "Secret length: $SECRET_LENGTH"
-      #     echo "Secret (hidden for security reasons): $(echo -n "${{ secrets.AWS_ROLE_ASSUMPTION }}" | sed 's/./& /g')"
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v3
-      #   with:
-      #     role-to-assume: ${{ env.AWS_ROLE }}  # Now referencing the env variable set from the secret
-      #     aws-region: us-east-1
-      #     role-session-name: cicd
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ASSUMPTION }}
+        role-session-name: cicd
+        aws-region: us-east-1
+    - name: Check if secret is available
+      run: |
+        if [ -z "${{ secrets.AWS_ROLE_TO_ASSUME }}" ]; then
+          echo "Secret is not available"
+        else
+          echo "Secret is available"
+        fi
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: arn:aws:iam::565604310253:role/aws-github-testing  # Secret is linked to the "testing" environment
-          aws-region: us-east-1
-          role-session-name: cicd
-
-      - name: Test identity
-        run: aws sts get-caller-identity
+    - name: test identity
+      run: |
+        aws sts get-caller-identity
