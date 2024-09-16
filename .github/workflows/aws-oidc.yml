@@ -1,0 +1,27 @@
+name: AWS OIDC Example
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  aws-oidc:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials using OIDC
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: us-east-1 # Set your desired AWS region
+
+    - name: Run sts get-caller-identity
+      run: aws sts get-caller-identity

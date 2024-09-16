@@ -7,8 +7,8 @@ env:
   AWS_REGION: "us-east-1"
 
 permissions:
-  id-token: write   # This is required for requesting the JWT
-  contents: read    # This is required for actions/checkout
+  id-token: write   
+  contents: read  
 
 jobs:
   deploy:
@@ -20,9 +20,9 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
-        role-to-assume: arn:aws:iam::565604310253:role/aws-oidc-testing
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+        aws-region: us-east-1 # Set your desired AWS region
         role-session-name: cicd
-        aws-region: ${{ env.AWS_REGION }}
 
     - name: test identity
       run: |
