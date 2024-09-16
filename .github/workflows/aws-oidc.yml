@@ -17,7 +17,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
+    - name: test envars 
+      run: |
+        echo ${{ secrets.AWS_ROLE_TO_ASSUME }}
     - name: Configure AWS Credentials using OIDC
       uses: aws-actions/configure-aws-credentials@v3
       with:
