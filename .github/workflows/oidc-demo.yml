@@ -20,10 +20,14 @@ jobs:
         role-to-assume: arn:aws:iam::565604310253:role/aws-github-testing
         role-session-name: cicd
         aws-region: us-east-1
-    - name: test envars 
+    - name: Check if secret is available
       run: |
-        echo ${{ secrets.AWS_ROLE_TO_ASSUME }}
-        
+        if [ -z "${{ secrets.AWS_ROLE_TO_ASSUME }}" ]; then
+          echo "Secret is not available"
+        else
+          echo "Secret is available"
+        fi
+
     - name: test identity
       run: |
         aws sts get-caller-identity
