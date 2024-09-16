@@ -10,6 +10,7 @@ permissions:
   contents: read  
 jobs:
   deploy:
+    environment: testing
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -17,16 +18,9 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v3
       with:
-        role-to-assume: ${{ secrets.AWS_ROLE_ASSUMPTION }}
+        role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
         role-session-name: cicd
         aws-region: us-east-1
-    - name: Check if secret is available
-      run: |
-        if [ -z "${{ secrets.AWS_ROLE_TO_ASSUME }}" ]; then
-          echo "Secret is not available"
-        else
-          echo "Secret is available"
-        fi
 
     - name: test identity
       run: |
