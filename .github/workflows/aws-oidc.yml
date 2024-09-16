@@ -23,6 +23,10 @@ jobs:
           else
             echo "Secret AWS_ROLE_TO_ASSUME is available"
           fi
+      - name: Check ARN Length
+        run: echo "Length of AWS_ROLE_TO_ASSUME: ${#AWS_ROLE_TO_ASSUME}"
+        env:
+          AWS_ROLE_TO_ASSUME: ${{ secrets.AWS_ROLE_TO_ASSUME }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
