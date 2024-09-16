@@ -16,6 +16,13 @@ jobs:
         uses: actions/checkout@v4
       - name: Debug OIDC Token
         run: echo $ACTIONS_ID_TOKEN_REQUEST_URL
+      - name: Debug Secret Access
+        run: |
+          if [ -z "${{ secrets.AWS_ROLE_TO_ASSUME }}" ]; then
+            echo "Secret AWS_ROLE_TO_ASSUME is not available"
+          else
+            echo "Secret AWS_ROLE_TO_ASSUME is available"
+          fi
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
