@@ -27,24 +27,24 @@ jobs:
       #   run: echo ${{ secrets.AWS_ROLE_TO_ASSUME }}  | sed 's/./& /g'
       #   env:
       #     AWS_ROLE: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-      - name: Set AWS Role from Secret
-        run: echo "AWS_ROLE=${{ secrets.AWS_ROLE_ASSUMPTION }}" >> $GITHUB_ENV
-      - name: Check Secret Length and Characters
-        run: |
-          SECRET_LENGTH=$(echo -n "${{ secrets.AWS_ROLE_ASSUMPTION }}" | wc -c)
-          echo "Secret length: $SECRET_LENGTH"
-          echo "Secret (hidden for security reasons): $(echo -n "${{ secrets.AWS_ROLE_ASSUMPTION }}" | sed 's/./& /g')"
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v3
-        with:
-          role-to-assume: ${{ env.AWS_ROLE }}  # Now referencing the env variable set from the secret
-          aws-region: us-east-1
-          role-session-name: cicd
+      # - name: Set AWS Role from Secret
+      #   run: echo "AWS_ROLE=${{ secrets.AWS_ROLE_ASSUMPTION }}" >> $GITHUB_ENV
+      # - name: Check Secret Length and Characters
+      #   run: |
+      #     SECRET_LENGTH=$(echo -n "${{ secrets.AWS_ROLE_ASSUMPTION }}" | wc -c)
+      #     echo "Secret length: $SECRET_LENGTH"
+      #     echo "Secret (hidden for security reasons): $(echo -n "${{ secrets.AWS_ROLE_ASSUMPTION }}" | sed 's/./& /g')"
+      # - name: Configure AWS credentials
+      #   uses: aws-actions/configure-aws-credentials@v3
+      #   with:
+      #     role-to-assume: ${{ env.AWS_ROLE }}  # Now referencing the env variable set from the secret
+      #     aws-region: us-east-1
+      #     role-session-name: cicd
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ASSUMPTION }}  # Secret is linked to the "testing" environment
+          role-to-assume: "${{ secrets.AWS_ROLE_ASSUMPTION }}"  # Secret is linked to the "testing" environment
           aws-region: us-east-1
           role-session-name: cicd
 
